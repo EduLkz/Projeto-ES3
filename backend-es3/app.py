@@ -1,28 +1,42 @@
-from flask import Flask
-from flask import request
+from flask import Flask, jsonify
 from flask_cors import CORS
-from RouteGen import genRoute
-import numpy as np
+from flask_sqlalchemy import SQLAlchemy
+from routes import bp
+import envmock as em
+
+db = SQLAlchemy()
+
+
+from sqlalchemy import Integer, String
+from sqlalchemy.orm import Mapped, mapped_column
+
+class User(db.Model):
+    __tablename__ = 'usuarios'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_type: Mapped[str]
+    email: Mapped[str] = mapped_column(unique=True)
+    password: Mapped[str]
+
 
 app = Flask(__name__)
 CORS(app)
+
 
 @app.route("/")
 def hello():
     return "Hello World!"
 
-@app.route("/gen-route", methods=['POST', 'GET'])
-def getRoutes():
-    content = request.get_json()
+app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql+psycopg2://{em.DB_USER}:{em.DB_PASSWD}@{em.DB_HOST}:{em.DB_PORT}/{em.DB_NAME}'
+print(f'postgresql://{em.DB_USER}:{em.DB_PASSWD}@{em.DB_HOST}:{em.DB_PORT}/{em.DB_NAME}')
+app.register_blueprint(bp)
+db.init_app(app)
 
-    coords = np.array([list(map(float, coord.split(','))) for coord in content['coords']])
-    origin = np.fromstring(content['origin'], sep=',')
-
-    route = genRoute(coords, origin)
-    waypoints = "|".join(f"{x[0]},{x[1]}" for x in route[:-1])
-    destination = f'{route[len(route) - 1][0]}, {route[len(route) - 1][1]}'
-
-    return f'https://www.google.com/maps/dir/?api=1&origin={origin[0]},{origin[1]}&destination={destination}&waypoints={waypoints}'
+@app.route('/user/<string:email>')
+def user_info(email):
+    user = db.session.query(User.id, User.email, User.password, User.user_type).filter_by(email=email).first()
+    if user:
+        return jsonify({'id': user.id, 'email': user.email, 'user_type': user.user_type})
+    return jsonify({'error': 'Usuário não encontrado'}), 404
 
 if __name__ == "__main__":
     app.run()
