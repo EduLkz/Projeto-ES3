@@ -14,19 +14,21 @@ def user_info(email):
         return jsonify({'id': user.id, 'email': user.email, 'user_type': user.user_type})
     return jsonify({'error': 'Usuário não encontrado'}), 404
 
-@dbr.route('/user',  methods=['POST', 'GET'])
+@dbr.route('/users/register',  methods=['POST'])
 def usuarios():
     content = request.get_json()
     try:
         with db.session.begin():
-            db.session.execute(text("CALL RegistrarCliente(:param1, :param2, :param3, :param4, :param5, NULL)"), {
+            print('Begin')
+            result = db.session.execute(text("SELECT RegistrarUsuario(:param1, :param2, :param3, :param4, :param5, :param6)"), {
                 'param1': content['nome'],
-                'param2': content['passwd'],
-                'param3': content['email'],
+                'param2': content['email'],
+                'param3': content['passwd'],
                 'param4': content['cel'],
-                'param5': content['endereco']
+                'param5': content['user_type'],
+                'param6': content['endereco']
             })
-            return '',204
+            return 'Usuario Registrado', 204
     except Exception as e:
         db.session.rollback()
         return jsonify(error=str(e))

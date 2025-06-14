@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import QRCodeReader from './QRCodeReader'
+import QRCodeReader from '../QRCodeReader'
 import { useSelector, useDispatch} from 'react-redux';
-import { setDriverCoord } from './slices/logSlice'
-import axios from "axios";
+import { setDriverCoord } from '../slices/logSlice'
+import { getAPIRoute } from "../api/apiCalls";
 
 export default function DriverLogged() {
 
@@ -28,9 +28,6 @@ export default function DriverLogged() {
         return;
       }
       dispatch(setDriverCoord([...driverCoord, inputCoord]))
-
-      
-
     }
 
     const getRoute = async () => {
@@ -41,22 +38,7 @@ export default function DriverLogged() {
         origin: `${latitude}, ${longitude}`,
         coords: coord
       }
-
-      console.log(JSON.stringify(body))
-
-      axios.post('http://127.0.0.1:5000/gen-route', 
-      JSON.stringify(body),
-      {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-    ).then((res) => {
-        console.log(res.data)
-        window.open(res.data,'_blank', 'rel=noopener noreferrer')
-      }).catch((e) => {
-        console.error(e.message)
-      })
+      getAPIRoute(body);
     }
 
     const driverCoord = useSelector(state => state.isLogged.driverCoord)
@@ -82,22 +64,24 @@ export default function DriverLogged() {
         </div>
 
         <table className='coordTable'>
-        {
-          driverCoord.map((c, index) => {
-            return (
-              <tr className='coord' key={index}>
-                <td className='coordIndex'>{index} </td>
-                <td> {c} </td>
-                <td style={{padding: 0}}> <button onClick={() => {
-                  const copy = [...driverCoord];
-                  copy.splice(index, 1)
-                  console.log(copy)
-                  dispatch(setDriverCoord(copy))
-                }} className='coordBtn'> - </button> </td>
-              </tr>
-            )
-          })
-        }
+          <tbody>
+          {
+            driverCoord.map((c, index) => {
+              return (
+                <tr className='coord' key={index}>
+                  <td className='coordIndex'>{index} </td>
+                  <td> {c} </td>
+                  <td style={{padding: 0}}> <button onClick={() => {
+                    const copy = [...driverCoord];
+                    copy.splice(index, 1)
+                    console.log(copy)
+                    dispatch(setDriverCoord(copy))
+                  }} className='coordBtn'> - </button> </td>
+                </tr>
+              )
+            })
+          }
+          </tbody>
         </table>
 
         <button className='loginButtons' onClick={getRoute}>

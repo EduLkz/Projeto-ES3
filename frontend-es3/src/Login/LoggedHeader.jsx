@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router'
-import { setLogged } from './slices/logSlice';
+import { setLogged } from '../slices/logSlice';
 
 
 export default function LoggedHeader() {

@@ -5,15 +5,17 @@
 
 .login{
   height: 100vh;
+
   justify-content: center;
   align-content: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .loginForm, .addCoord{
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin: 50px 0;
 
   align-items: center;
   justify-content: center;
@@ -40,8 +42,17 @@
 
 }
 
+.registerButton{
+  display: inline-block;
+  
+  width: 220px;
+  cursor: pointer;
+  justify-content: center;
+  text-decoration: none;
+}
+
 .loginButtons:hover{
-  background-color: rgb(207, 107, 107);
+  background-color: rgb(107, 154, 207);
 }
 .loginButtons:active{
   background-color: rgb(201, 127, 127);

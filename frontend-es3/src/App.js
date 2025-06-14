@@ -1,10 +1,10 @@
 import { Route, Routes } from 'react-router';
 import './App.css';
-import Login from './Login';
-import Logged from './Logged';
+import Login from './Login/Login';
+import Logged from './Login/Logged';
 import { useSelector } from 'react-redux';
 import Deliveries from './Deliveries';
-import LoggedHeader from './LoggedHeader';
+import LoggedHeader from './Login/LoggedHeader';
 
 function App() {
 
