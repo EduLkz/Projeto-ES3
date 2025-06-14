@@ -4,7 +4,7 @@ from flask import request, Blueprint
 
 bp = Blueprint('routes', __name__)
 
-@bp.route("/gen-route", methods=['POST', 'GET'])
+@bp.route("/gen-route", methods=['POST'])
 def getRoutes():
     content = request.get_json()
 
