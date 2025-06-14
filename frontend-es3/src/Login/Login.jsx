@@ -33,7 +33,7 @@ export default function Login() {
             <button onClick={() => { setType(1) }} className='loginButtons'>Entregador</button>
         </div>
         <div>
-            <Link route='/register' className='registerButton loginButtons'>Não Tenho Conta</Link>
+            <Link to='/register' className='registerButton loginButtons'>Não Tenho Conta</Link>
         </div>
         <div>  
             <form action="submit" method="post" className='loginForm' onSubmit={handleSubmit}>

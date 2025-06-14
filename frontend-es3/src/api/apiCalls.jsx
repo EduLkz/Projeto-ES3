@@ -2,13 +2,9 @@ import axios from "axios"
 
 const apiAddr = 'http://127.0.0.1:5000'
 
-export const validateLogin = async(email, password, userType) => {
-    const body = {
-        email: email,
-        password: password,
-        user_type: String(userType)
-    }
-
+export const validateLogin = async(body) => {
+    console.log(JSON.stringify(body));
+    
     try{
         let res = await axios.post(`${apiAddr}/users/login`,
             JSON.stringify(body),

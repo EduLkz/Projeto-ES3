@@ -3,7 +3,15 @@
   height: 100%;
 }
 
-.login{
+span{
+  color: red;
+  font-size: .6em;
+  font-weight: bold;
+  margin: 0;
+  margin-top: -10px;
+}
+
+.login, .register{
   height: 100vh;
 
   justify-content: center;
@@ -12,14 +20,20 @@
   flex-direction: column;
 }
 
-.loginForm, .addCoord{
+
+.loginForm, .addCoord, .registerForm{
   display: flex;
   flex-direction: column;
   gap: 10px;
 
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  text-align: left;
 }
+
+/* .registerForm .formInput{
+  width: 40%;
+} */
 
 .formInput{
   display: flex;
@@ -138,4 +152,70 @@
 
 .deliveries, .profile, .logged {
   margin-top: 50px;
+}
+
+
+.custom-dropdown-root {
+  position: relative;
+  width: 170px;
+  margin-bottom: 10px;
+  text-align: left;
+  border: 1px solid #8F8F9D; /*#676774;*/
+  border-radius: 2px;
+  padding: 5px;
+}
+
+.custom-dropdown-menu {
+  position: absolute;
+  width: 100%;
+  top: 100%; 
+  left: 0;
+  z-index: 1000; 
+  border: 1px solid #000000;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background: white;
+  margin-top: 5px;
+}
+
+.custom-dropdown-control:hover {
+  border-color: #020202;
+}
+
+/* Estilo do texto do placeholder */
+.custom-dropdown-placeholder {
+  color: #000000;
+}
+
+/* Estilo do menu suspenso */
+.custom-dropdown-menu {
+  border: 1px solid #00000070;
+  border-radius: 2px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.041);
+}
+
+/* Estilo das opções do menu */
+.custom-dropdown-menu .Dropdown-option {
+  padding: 10px;
+  background-color: white;
+  color: #333;
+}
+
+.custom-dropdown-menu .Dropdown-option:hover {
+  background-color: #f0f0f0;
+}
+
+.custom-dropdown-menu .Dropdown-option.is-selected {
+  background-color: #e0e0e0;
+  color: #000;
+}
+
+/* Estilo da seta do dropdown */
+.custom-dropdown-arrow {
+  border-color: #666 transparent transparent;
+  border-width: 6px 6px 0;
+}
+
+.custom-dropdown-control.is-open .custom-dropdown-arrow {
+  border-color: transparent transparent #666;
+  border-width: 0 6px 6px;
 }

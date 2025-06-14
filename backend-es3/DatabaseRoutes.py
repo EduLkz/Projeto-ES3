@@ -17,17 +17,19 @@ def user_info(email):
 @dbr.route('/users/register',  methods=['POST'])
 def usuarios():
     content = request.get_json()
+    print(content)
     try:
         with db.session.begin():
             print('Begin')
             result = db.session.execute(text("SELECT RegistrarUsuario(:param1, :param2, :param3, :param4, :param5, :param6)"), {
                 'param1': content['nome'],
                 'param2': content['email'],
-                'param3': content['passwd'],
+                'param3': content['password'],
                 'param4': content['cel'],
                 'param5': content['user_type'],
                 'param6': content['endereco']
             })
+
             return 'Usuario Registrado', 204
     except Exception as e:
         db.session.rollback()
