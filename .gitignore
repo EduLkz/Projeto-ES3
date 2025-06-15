@@ -26,3 +26,6 @@ ENV/
 Thumbs.db
 ./backend-es3/emvmock.py
 .env
+*.key
+*.pem
+*.cert
