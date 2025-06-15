@@ -42,9 +42,9 @@ def login():
     try:
         usuario = db.session.execute(text("SELECT * FROM AutenticarUsuario(:param1, :param2, :param3)"),
                                       {
-                                          'param1': requestInfo[0],
-                                          'param2': requestInfo[1],
-                                          'param3': requestInfo[2]
+                                        'param1': requestInfo[0],
+                                        'param2': requestInfo[1],
+                                        'param3': requestInfo[2]
                                       }
                                     ).fetchone()
 
@@ -71,4 +71,30 @@ def login():
             'msg': str(e),
             'status': 400
         }
-        return jsonify(user_data)
+        return jsonify(user_data), 400
+    
+@dbr.route('/users/buscarpedidos', methods=['POST'])
+def getDeliveries():
+    content = request.get_json()
+    try:
+        result = db.session.execute(text(
+            "select * FROM buscar_pedidos(:param1, :param2)" 
+        ), {
+            'param1': content['id'],
+            'param2': content['user_type']
+        })
+
+        deliveries = [dict(row._asdict()) for row in result]
+        
+        return jsonify({
+            'data': deliveries,
+            'status': 200
+        }), 200
+
+    except Exception as e:
+        db.session.rollback()
+        user_data = {
+            'msg': str(e),
+            'status': 400
+        }
+        return jsonify(user_data), 400
