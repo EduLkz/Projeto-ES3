@@ -20,6 +20,15 @@ span{
   flex-direction: column;
 }
 
+.profile{
+  height: 100vh;
+  padding-top: 50px;
+  align-items: center;
+  align-content: center;
+  display: flex;
+  flex-direction: column;
+}
+
 
 .loginForm, .addCoord, .registerForm{
   display: flex;
@@ -53,7 +62,7 @@ span{
   font-weight: bolder;
 
   cursor: pointer;
-
+  text-decoration: none;
 }
 
 .registerButton{
@@ -218,4 +227,105 @@ span{
 .custom-dropdown-control.is-open .custom-dropdown-arrow {
   border-color: transparent transparent #666;
   border-width: 0 6px 6px;
+}
+
+.confirmation-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.manual-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-section, .manual-section {
+  margin: 20px 0;
+  text-align: center;
+  
+}
+
+.or-divider {
+  text-align: center;
+  margin: 15px 0;
+  font-weight: bold;
+}
+
+.close-btn {
+  display: block;
+  margin-top: 20px;
+  width: 100%;
+  padding: 8px;
+  background: #f0f0f0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.qr-container {
+  padding: 1rem;
+  background: white;
+  margin: 1rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.delivery-info {
+  margin: 1.5rem 0;
+  text-align: left;
+}
+
+.close-button {
+  background-color: #6c757d;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
 }

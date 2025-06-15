@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Dropdown from 'react-dropdown';
 import { registerUser } from './api/apiCalls';
+import { Link, useNavigate } from 'react-router';
 
 export default function Register() {
 
-  
+  const navigate = useNavigate();
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({ mode: "all" })
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordConfInput, setPasswordConfInput] = useState('');
@@ -28,13 +29,16 @@ export default function Register() {
   }
 
   const tryRegister = async(body) => {
-    //try{
+    try{
       const result = await registerUser(body);
       console.log(result)
-    // }catch(err){
-    //   console.log(err);
-      
-    // }
+      if(result[1] > 400)
+        alert("Erro ao registrar usuario\n" + result[0].msg);
+      else
+        navigate('/')
+    }catch(err){
+        console.log(err);
+    }
   }
 
   useEffect (() => {
@@ -114,9 +118,16 @@ export default function Register() {
             {errors.endereco && <span>Este campo é necessario</span>}
           </>
         }
+        <div>
 
-        <button type='submit' className='loginButtons'>
-           Registrar </button>
+          <button type='submit' className='loginButtons'>
+            Registrar 
+          </button>
+
+          <Link to='/' className='loginButtons'>
+            Ja Possuo conta
+          </Link>
+        </div>
       </form>
             
     </div>

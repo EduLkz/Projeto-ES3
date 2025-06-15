@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import Deliveries from './Deliveries';
 import LoggedHeader from './Login/LoggedHeader';
 import Register from './Register';
+import UserProfile from './User/UserProfile';
 
 function App() {
 
@@ -18,7 +19,7 @@ function App() {
     <Routes>
 
       <Route path="/" element={ logged ? <Logged/> : <Login/> }/>
-      <Route path="/profile" element={ <></>}/>
+      <Route path="/profile" element={ <UserProfile/>}/>
       <Route path="/MinhasEntregas" element={<Deliveries/>} />
       <Route path="/register" element={<Register/>} />
     </Routes> 
