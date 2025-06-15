@@ -4,6 +4,7 @@ from sqlalchemy.sql import text
 from sqlalchemy.orm import with_polymorphic
 from Models import User, Cliente
 from extensions import db
+from RouteGen import adrToCoord, coordToAdr
 
 dbr = Blueprint('database', __name__)
 
@@ -17,23 +18,38 @@ def user_info(email):
 @dbr.route('/users/register',  methods=['POST'])
 def usuarios():
     content = request.get_json()
-    print(content)
+    endereco = adrToCoord(content['endereco'])
     try:
         with db.session.begin():
-            print('Begin')
             result = db.session.execute(text("SELECT RegistrarUsuario(:param1, :param2, :param3, :param4, :param5, :param6)"), {
                 'param1': content['nome'],
                 'param2': content['email'],
                 'param3': content['password'],
                 'param4': content['cel'],
                 'param5': content['user_type'],
-                'param6': content['endereco']
-            })
+                'param6': endereco
+            }).fetchone()
 
-            return 'Usuario Registrado', 204
+            print(result)
+
+            if result and hasattr(result, 'registrarusuario'):
+                if 'violates unique constraint' in result.registrarusuario:
+                    raise ValueError("E-mail já cadastrado")
+                elif 'error' in result.registrarusuario.lower():
+                    raise ValueError(result.registrarusuario)
+            
+            return jsonify({
+                'msg': 'Usuário registrado com sucesso',
+                'status': 201
+            }), 201
+
     except Exception as e:
         db.session.rollback()
-        return jsonify(error=str(e))
+        user_data = {
+            'msg': str(e),
+            'status': 400
+        }
+        return jsonify(user_data), 400
 
 @dbr.route('/users/login', methods=['POST'])
 def login():
@@ -62,9 +78,9 @@ def login():
 
         # Adiciona endereço se for cliente
         if content['user_type'] == '0':
-            user_data['endereco'] = usuario[4]
+            user_data['endereco'] = coordToAdr(usuario[4])
 
-        return jsonify(user_data)
+        return jsonify(user_data), 200
     except Exception as e:
         db.session.rollback()
         user_data = {
@@ -86,8 +102,80 @@ def getDeliveries():
 
         deliveries = [dict(row._asdict()) for row in result]
         
+
+        for delivery in deliveries:
+            if 'endereco' in delivery and isinstance(delivery['endereco'], str) and ',' in delivery['endereco']:
+                try:
+                    # Tenta converter e sobrescreve o campo original
+                    delivery['endereco'] = coordToAdr(delivery['endereco']) or delivery['endereco']
+                except Exception as e:
+                    print(f"Falha ao converter {delivery['endereco']}: {e}")
+                    # Mantém as coordenadas originais se houver erro
+
+
         return jsonify({
             'data': deliveries,
+            'status': 200
+        }), 200
+
+    except Exception as e:
+        db.session.rollback()
+        user_data = {
+            'msg': str(e),
+            'status': 400
+        }
+        return jsonify(user_data), 400
+
+
+@dbr.route('/users/buscarpedidosrota', methods=['POST'])
+def getDeliveriesRoute():
+    content = request.get_json()
+    try:
+        result = db.session.execute(text(
+            "select * FROM pedidos_em_rota(:param1, :param2)" 
+        ), {
+            'param1': content['id'],
+            'param2': content['user_type']
+        })
+
+        deliveries = [dict(row._asdict()) for row in result]
+        
+
+        for delivery in deliveries:
+            if 'endereco' in delivery and isinstance(delivery['endereco'], str) and ',' in delivery['endereco']:
+                try:
+                    # Tenta converter e sobrescreve o campo original
+                    delivery['endereco'] = coordToAdr(delivery['endereco']) or delivery['endereco']
+                except Exception as e:
+                    print(f"Falha ao converter {delivery['endereco']}: {e}")
+                    # Mantém as coordenadas originais se houver erro
+
+
+        return jsonify({
+            'data': deliveries,
+            'status': 200
+        }), 200
+
+    except Exception as e:
+        db.session.rollback()
+        user_data = {
+            'msg': str(e),
+            'status': 400
+        }
+        return jsonify(user_data), 400
+    
+@dbr.route('/users/confirmarEntrega',  methods=['POST'])
+def confirmarEntrega():
+    content = request.get_json()
+    try:
+        with db.session.begin():
+            db.session.execute(text("SELECT update_pedido(:param1, :param2)"), {
+                'param1': content['cod'],
+                'param2': content['id']
+            })
+
+        return jsonify({
+            'msg': 'Pedido entregue com sucesso',
             'status': 200
         }), 200
 

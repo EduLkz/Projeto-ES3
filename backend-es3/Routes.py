@@ -1,6 +1,7 @@
 from RouteGen import genRoute
 import numpy as np
 from flask import request, Blueprint
+from RouteGen import adrToCoord
 
 bp = Blueprint('routes', __name__)
 
@@ -8,7 +9,10 @@ bp = Blueprint('routes', __name__)
 def getRoutes():
     content = request.get_json()
 
-    coords = np.array([list(map(float, coord.split(','))) for coord in content['coords']])
+
+    coords_Convert = [adrToCoord(endereco) for endereco in content['coords']]
+
+    coords = np.array([list(map(float, coord.split(','))) for coord in coords_Convert])
     origin = np.fromstring(content['origin'], sep=',')
 
     route = genRoute(coords, origin)

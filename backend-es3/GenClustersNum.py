@@ -22,4 +22,4 @@ def getCustersNum(pontos):
     # Retorna o k com maior score (garantindo que seja ≥ 2)
     melhor_k = max(melhores_k, key=lambda x: x[1])
 
-    return melhor_k
+    return melhor_k[0]
