@@ -2,8 +2,12 @@ import axios from "axios"
 
 const apiAddr = 'http://127.0.0.1:5000'
 
-export const validateLogin = async(body) => {
-    console.log(JSON.stringify(body));
+export const validateLogin = async(email, password, user_type) => {
+    const body = {
+        email: email,
+        password: password,
+        user_type: String(user_type)
+    }
     
     try{
         let res = await axios.post(`${apiAddr}/users/login`,
@@ -32,15 +36,8 @@ export const validateLogin = async(body) => {
     }
 }
 
-export const registerUser = async (nome, password, email, cel, endereco, user_type) => {
-    const body = {
-        nome: nome,
-        passwd: password,
-        email: email,
-        cel: cel,
-        user_type: user_type,
-        endereco: endereco
-    }
+export const registerUser = async (body) => {
+    console.log(JSON.stringify(body));
 
     try{
         let res = await axios.post(`${apiAddr}/users/register`,
@@ -48,7 +45,6 @@ export const registerUser = async (nome, password, email, cel, endereco, user_ty
             {
                 headers: {
                 'Content-Type': 'application/json',
-                // * The next headers I wrote because i think the problem could be CORS too, but I dont know if are necessary *
                 'Access-Control-Allow-Origin': '*', 
                 'Access-Control-Allow-Credentials': true ,
                 'Cache-Control': 'no-cache',
@@ -57,7 +53,34 @@ export const registerUser = async (nome, password, email, cel, endereco, user_ty
             }
         )
 
-        console.log(res)
+        return res.data
+    }catch(e) {
+        const res_e = {
+            msg: e.message,
+            status: 404
+        }
+        
+        return res_e
+    }
+}
+
+export const getPedidos = async (body) => {
+    console.log(JSON.stringify(body));
+
+    try{
+        let res = await axios.post(`${apiAddr}/users/buscarpedidos`,
+            JSON.stringify(body),
+            {
+                headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*', 
+                'Access-Control-Allow-Credentials': true ,
+                'Cache-Control': 'no-cache',
+                'Access-Control-Allow-Headers': 'Content-type, Accept'
+                }
+            }
+        )
+
         return res.data
     }catch(e) {
         const res_e = {
@@ -74,7 +97,11 @@ export const getAPIRoute = (body) => {
       JSON.stringify(body),
       {
         headers: {
-          'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*', 
+            'Access-Control-Allow-Credentials': true ,
+            'Cache-Control': 'no-cache',
+            'Access-Control-Allow-Headers': 'Content-type, Accept'
         }
       }
     ).then((res) => {

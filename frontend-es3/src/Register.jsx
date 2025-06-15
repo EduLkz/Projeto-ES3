@@ -13,6 +13,10 @@ export default function Register() {
     
   const onSubmit = (data) => {
     delete data.passwordConfirm;
+    if(!data.endereco){
+        data.endereco = ''
+    }
+
 
     if (!selectedValue) {
       setIsTouched(true);

@@ -5,7 +5,8 @@ export const logSlice = createSlice({
     initialState: {
         value: false,
         userType: 0,
-        driverCoord: []
+        driverCoord: [],
+        user: {}
     },
     reducers: {
         setLogged: (state, action) => {
@@ -17,9 +18,12 @@ export const logSlice = createSlice({
         setDriverCoord: (state, action) => {
             state.driverCoord = action.payload;
         },
+        setLoggedUser: (state, action) => {
+            state.user = action.payload;
+        },
     }
 })
 
-export const { setLogged, setUserType, setDriverCoord } = logSlice.actions
+export const { setLogged, setUserType, setDriverCoord, setLoggedUser } = logSlice.actions
 
 export default logSlice.reducer

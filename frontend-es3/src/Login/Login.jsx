@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { setLogged, setUserType } from '../slices/logSlice'
+import { setLogged, setUserType, setLoggedUser } from '../slices/logSlice'
 import { validateLogin } from '../api/apiCalls'
 import { Link } from 'react-router'
 
@@ -21,8 +21,8 @@ export default function Login() {
         }
 
         const loginValidation = await validateLogin(userEmail, userPasswd, userType);
-        console.log(loginValidation)
-
+        
+        dispatch(setLoggedUser(loginValidation))
         dispatch(setLogged(loginValidation.status === 200))
     }
 

@@ -5,7 +5,7 @@ import DriverLogged from '../Driver/DriverLogged'
 
 export default function Logged() {
 
-    const userType = useSelector(state => state.isLogged.userType)
+  const userType = useSelector(state => state.isLogged.userType)
     
   return (
     <div className='logged'>
